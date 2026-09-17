@@ -1,0 +1,301 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Food Fusion | Order Confirmed</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a href="{% url 'home' %}" class="logo">
+        <i class="fa-solid fa-utensils"></i>
+        Food <span>Fusion</span>
+    </a>
+
+    <div class="nav-menu" id="navMenu">
+
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'menu' %}">Menu</a>
+        <a href="{% url 'restaurants' %}">Restaurants</a>
+        <a href="{% url 'offers' %}">Offers</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'orders' %}">Orders</a>
+        {% endif %}
+
+        <div class="nav-right">
+
+            <form action="{% url 'menu' %}" method="GET" class="search-box">
+                <input type="text"
+                       name="search"
+                       placeholder="Search food..."
+                       value="{{ request.GET.search|default:'' }}">
+
+                <button type="submit">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </form>
+
+            <a href="{% url 'cart' %}" class="cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <span class="welcome-user">
+                    Hi, {{ user.first_name|default:user.username }}
+                </span>
+
+                <a href="{% url 'logout' %}" class="signup-btn">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="login-btn">
+                    Login
+                </a>
+
+                <a href="{% url 'signup' %}" class="signup-btn">
+                    Sign Up
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="menu-icon" id="menuToggle" type="button">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+</nav>
+<!-- CONFIRMATION -->
+
+<main class="page-section">
+
+
+    <div class="confirmation-container">
+
+
+        <!-- SUCCESS ICON -->
+
+        <div class="success-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <h1>
+            Order Confirmed!
+        </h1>
+
+
+        <p class="confirmation-message">
+
+            Thank you for your order.
+            Your delicious food is being prepared.
+
+        </p>
+
+
+        <!-- ORDER DETAILS -->
+
+        <div class="order-info">
+
+            <div class="info-row">
+
+                <span>
+                    Order ID
+                </span>
+
+                <strong>
+                    #{{ order.id }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Customer
+                </span>
+
+                <strong>
+                    {{ order.name }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Phone
+                </span>
+
+                <strong>
+                    {{ order.phone }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Delivery Address
+                </span>
+
+                <strong>
+                    {{ order.address }},
+                    {{ order.city }} -
+                    {{ order.pincode }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Payment
+                </span>
+
+                <strong>
+
+                    {{ order.payment.get_payment_method_display }}
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Order Status
+                </span>
+
+                <strong class="status">
+
+                    {{ order.get_status_display }}
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-row total-row">
+
+                <span>
+                    Total Amount
+                </span>
+
+                <strong>
+                    ₹{{ order.total_amount }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER ITEMS -->
+
+        <div class="confirmed-items">
+
+            <h2>
+                Ordered Items
+            </h2>
+
+
+            {% for item in order_items %}
+
+                <div class="confirmed-item">
+
+                    <span>
+
+                        {{ item.food.name }}
+
+                        ×
+
+                        {{ item.quantity }}
+
+                    </span>
+
+                    <strong>
+                        ₹{{ item.total_price }}
+                    </strong>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="confirmation-buttons">
+
+            <a
+                href="{% url 'orders' %}"
+                class="checkout-btn"
+            >
+
+                <i class="fa-solid fa-box"></i>
+
+                View My Orders
+
+            </a>
+
+
+            <a
+                href="{% url 'menu' %}"
+                class="continue-btn"
+            >
+
+                <i class="fa-solid fa-utensils"></i>
+
+                Continue Shopping
+
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="{% static 'js/index.js' %}"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,185 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Food Fusion | Orders</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+
+<nav class="navbar">
+
+    <a href="{% url 'home' %}" class="logo">
+        <i class="fa-solid fa-utensils"></i>
+        Food <span>Fusion</span>
+    </a>
+
+    <div class="nav-menu" id="navMenu">
+
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'menu' %}">Menu</a>
+        <a href="{% url 'restaurants' %}">Restaurants</a>
+        <a href="{% url 'offers' %}">Offers</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'orders' %}">Orders</a>
+        {% endif %}
+
+        <div class="nav-right">
+
+            <form action="{% url 'menu' %}" method="GET" class="search-box">
+                <input type="text"
+                       name="search"
+                       placeholder="Search food..."
+                       value="{{ request.GET.search|default:'' }}">
+
+                <button type="submit">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </form>
+
+            <a href="{% url 'cart' %}" class="cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <span class="welcome-user">
+                    Hi, {{ user.first_name|default:user.username }}
+                </span>
+
+                <a href="{% url 'logout' %}" class="signup-btn">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="login-btn">
+                    Login
+                </a>
+
+                <a href="{% url 'signup' %}" class="signup-btn">
+                    Sign Up
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="menu-icon" id="menuToggle" type="button">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+</nav>
+
+<main class="page-section">
+
+    <div class="section-title">
+
+        <p>MY ORDERS</p>
+
+        <h2>
+            Your Orders
+        </h2>
+
+    </div>
+
+
+    {% for order in orders %}
+
+    <div class="order-card">
+
+        <div class="order-icon">
+
+            <i class="fa-solid fa-box"></i>
+
+        </div>
+
+
+        <div class="order-details">
+
+            <h3>
+                Order #{{ order.id }}
+            </h3>
+
+            <p>
+                ₹{{ order.total_amount }}
+            </p>
+
+            <span>
+                {{ order.created_at|date:"d M Y, h:i A" }}
+            </span>
+
+        </div>
+
+
+        <div class="order-status">
+
+            <span>
+                {{ order.get_status_display }}
+            </span>
+
+        </div>
+
+
+        <a href="{% url 'order_detail' order.id %}"
+           class="view-btn">
+
+            View Order
+
+        </a>
+
+    </div>
+
+    {% empty %}
+
+    <div class="empty-box">
+
+        <i class="fa-solid fa-box-open"></i>
+
+        <h2>
+            No orders yet
+        </h2>
+
+        <p>
+            Start ordering your favourite food.
+        </p>
+
+        <a href="{% url 'menu' %}"
+           class="order-btn">
+
+            Browse Menu
+
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</main>
+
+
+<script src="{% static 'js/index.js' %}"></script>
+
+</body>
+
+</html>

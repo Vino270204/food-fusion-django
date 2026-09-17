@@ -1,0 +1,497 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Food Fusion | Home</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <a href="{% url 'home' %}" class="logo">
+        <i class="fa-solid fa-utensils"></i>
+        Food <span>Fusion</span>
+    </a>
+
+    <div class="nav-menu" id="navMenu">
+
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'menu' %}">Menu</a>
+        <a href="{% url 'restaurants' %}">Restaurants</a>
+        <a href="{% url 'offers' %}">Offers</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'orders' %}">Orders</a>
+        {% endif %}
+
+        <div class="nav-right">
+
+            <form action="{% url 'menu' %}" method="GET" class="search-box">
+                <input type="text"
+                       name="search"
+                       placeholder="Search food..."
+                       value="{{ request.GET.search|default:'' }}">
+
+                <button type="submit">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </form>
+
+            <a href="{% url 'cart' %}" class="cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <span class="welcome-user">
+                    Hi, {{ user.first_name|default:user.username }}
+                </span>
+
+                <a href="{% url 'logout' %}" class="signup-btn">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="login-btn">
+                    Login
+                </a>
+
+                <a href="{% url 'signup' %}" class="signup-btn">
+                    Sign Up
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="menu-icon" id="menuToggle" type="button">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+</nav>
+<!-- ================= MESSAGES ================= -->
+
+{% if messages %}
+
+<div class="messages-container">
+
+    {% for message in messages %}
+
+    <div class="message {{ message.tags }}">
+        {{ message }}
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <p class="small-title">
+            <i class="fa-solid fa-fire"></i>
+            Delicious & Fresh
+        </p>
+
+        <h1>
+            Delicious food,
+            <span>delivered fast</span>
+        </h1>
+
+        <p class="hero-text">
+
+            Your favourite food from the best restaurants
+            delivered fresh and fast to your doorstep.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="{% url 'menu' %}"
+               class="order-btn">
+
+                Order Now
+
+            </a>
+
+            <a href="{% url 'menu' %}"
+               class="explore-btn">
+
+                Explore Menu
+
+            </a>
+
+        </div>
+
+
+        <div class="delivery-info">
+
+            <div>
+
+                <i class="fa-solid fa-truck"></i>
+
+                <div>
+                    <h4>Fast Delivery</h4>
+                    <p>30-45 minutes</p>
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <i class="fa-solid fa-leaf"></i>
+
+                <div>
+                    <h4>Fresh Food</h4>
+                    <p>Quality ingredients</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-image">
+
+        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80"
+             alt="Pizza">
+
+    </div>
+
+</section>
+
+
+<!-- ================= RESTAURANTS ================= -->
+
+<section class="restaurants-section">
+
+    <div class="section-title">
+
+        <p>TOP RESTAURANTS</p>
+
+        <h2>
+            Explore Restaurants
+        </h2>
+
+        <span>
+            Discover delicious food from nearby restaurants
+        </span>
+
+    </div>
+
+
+    <div class="restaurant-container">
+
+        {% for restaurant in restaurants %}
+
+        <article class="restaurant-card">
+
+            {% if restaurant.image %}
+
+                <img src="{{ restaurant.image.url }}"
+                     alt="{{ restaurant.name }}">
+
+            {% else %}
+
+                <img src="{% static 'images/default-restaurant.jpg' %}"
+                     alt="{{ restaurant.name }}">
+
+            {% endif %}
+
+
+            <div class="restaurant-info">
+
+                <h3>
+                    {{ restaurant.name }}
+                </h3>
+
+                <p>
+                    {{ restaurant.description|truncatewords:15 }}
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    {{ restaurant.location }}
+                </p>
+
+                <a href="{% url 'restaurant_detail' restaurant.id %}"
+                   class="view-btn">
+
+                    View Menu
+
+                </a>
+
+            </div>
+
+        </article>
+
+        {% empty %}
+
+        <p class="empty-message">
+            No restaurants available.
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- ================= POPULAR FOOD ================= -->
+
+<section class="popular-section"
+         id="popular">
+
+    <div class="section-heading">
+
+        <div>
+
+            <p>POPULAR DISHES</p>
+
+            <h2>
+                Customer Favorites
+            </h2>
+
+        </div>
+
+        <a href="{% url 'menu' %}">
+            View All →
+        </a>
+
+    </div>
+
+
+    <div class="food-container">
+
+        {% for food in foods %}
+
+        <article class="food-card">
+
+            <div class="food-image">
+
+                {% if food.image %}
+
+                    <img src="{{ food.image.url }}"
+                         alt="{{ food.name }}">
+
+                {% else %}
+
+                    <img src="{% static 'images/default-food.jpg' %}"
+                         alt="{{ food.name }}">
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="food-details">
+
+                <span class="food-category">
+                    {{ food.category }}
+                </span>
+
+                <h3>
+                    {{ food.name }}
+                </h3>
+
+                <p>
+                    {{ food.description|truncatewords:12 }}
+                </p>
+
+
+                <div class="food-bottom">
+
+                    <strong>
+                        ₹{{ food.price }}
+                    </strong>
+
+                    <form method="POST"
+                          action="{% url 'add_to_cart' food.id %}">
+
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Add to Cart
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% empty %}
+
+        <p class="empty-message">
+            No food available.
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- ================= OFFER ================= -->
+
+{% if offers %}
+
+<section class="offer-section">
+
+    {% with offer=offers.0 %}
+
+    <div class="offer-content">
+
+        <p>LIMITED TIME OFFER</p>
+
+        <h2>
+            {{ offer.title }}
+        </h2>
+
+        <span>
+            {{ offer.description }}
+        </span>
+
+        <p>
+            Get {{ offer.discount_percentage }}% OFF
+        </p>
+
+        <p>
+            Coupon:
+            <b>{{ offer.coupon_code }}</b>
+        </p>
+
+        <a href="{% url 'menu' %}"
+           class="offer-btn">
+
+            Order Now
+
+        </a>
+
+    </div>
+
+    {% endwith %}
+
+</section>
+
+{% endif %}
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-container">
+
+        <div class="footer-about">
+
+            <a href="{% url 'home' %}"
+               class="logo">
+
+                <i class="fa-solid fa-utensils"></i>
+                Food <span>Fusion</span>
+
+            </a>
+
+            <p>
+                Delicious food delivered fresh
+                to your doorstep.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h3>Quick Links</h3>
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'menu' %}">
+                Menu
+            </a>
+
+            <a href="{% url 'restaurants' %}">
+                Restaurants
+            </a>
+
+            <a href="{% url 'offers' %}">
+                Offers
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Contact</h3>
+
+            <p>
+                <i class="fa-solid fa-phone"></i>
+                +91 9876543210
+            </p>
+
+            <p>
+                <i class="fa-solid fa-envelope"></i>
+                foodfusion@example.com
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Food Fusion. All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+<script src="{% static 'js/index.js' %}"></script>
+
+</body>
+
+</html>

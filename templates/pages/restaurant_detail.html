@@ -1,0 +1,225 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ restaurant.name }} | Food Fusion
+    </title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <a href="{% url 'home' %}" class="logo">
+        <i class="fa-solid fa-utensils"></i>
+        Food <span>Fusion</span>
+    </a>
+
+    <div class="nav-menu" id="navMenu">
+
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'menu' %}">Menu</a>
+        <a href="{% url 'restaurants' %}">Restaurants</a>
+        <a href="{% url 'offers' %}">Offers</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'orders' %}">Orders</a>
+        {% endif %}
+
+        <div class="nav-right">
+
+            <form action="{% url 'menu' %}" method="GET" class="search-box">
+                <input type="text"
+                       name="search"
+                       placeholder="Search food..."
+                       value="{{ request.GET.search|default:'' }}">
+
+                <button type="submit">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </form>
+
+            <a href="{% url 'cart' %}" class="cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <span class="welcome-user">
+                    Hi, {{ user.first_name|default:user.username }}
+                </span>
+
+                <a href="{% url 'logout' %}" class="signup-btn">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="login-btn">
+                    Login
+                </a>
+
+                <a href="{% url 'signup' %}" class="signup-btn">
+                    Sign Up
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="menu-icon" id="menuToggle" type="button">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+</nav>
+
+<main class="page-section">
+
+    <div class="restaurant-header">
+
+        {% if restaurant.image %}
+
+        <img src="{{ restaurant.image.url }}"
+             alt="{{ restaurant.name }}">
+
+        {% endif %}
+
+
+        <div>
+
+            <h1>
+                {{ restaurant.name }}
+            </h1>
+
+            <p>
+                {{ restaurant.description }}
+            </p>
+
+            <p>
+                <i class="fa-solid fa-location-dot"></i>
+                {{ restaurant.location }}
+            </p>
+
+            <p>
+                <i class="fa-solid fa-phone"></i>
+                {{ restaurant.phone }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="section-title">
+
+        <p>MENU</p>
+
+        <h2>
+            Food from {{ restaurant.name }}
+        </h2>
+
+    </div>
+
+
+    <div class="food-container">
+
+        {% for food in foods %}
+
+        <article class="food-card">
+
+            <div class="food-image">
+
+                {% if food.image %}
+
+                <img src="{{ food.image.url }}"
+                     alt="{{ food.name }}">
+
+                {% else %}
+
+                <img src="{% static 'images/default-food.jpg' %}"
+                     alt="{{ food.name }}">
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="food-details">
+
+                <span class="food-category">
+                    {{ food.category }}
+                </span>
+
+                <h3>
+                    {{ food.name }}
+                </h3>
+
+                <p>
+                    {{ food.description }}
+                </p>
+
+
+                <div class="food-bottom">
+
+                    <strong>
+                        ₹{{ food.price }}
+                    </strong>
+
+                    <form method="POST"
+                          action="{% url 'add_to_cart' food.id %}">
+
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Add to Cart
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% empty %}
+
+        <div class="empty-box">
+
+            <h2>
+                No food available.
+            </h2>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</main>
+
+
+<script src="{% static 'js/index.js' %}"></script>
+
+</body>
+
+</html>
