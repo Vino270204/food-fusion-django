@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -138,15 +139,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-STATIC_ROOT=os.path.join(BASE_DIR,'static/media')
-STATIC_DIR=os.path.join(BASE_DIR,'static')
-STATICFILES_DIRS=[STATIC_DIR]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-LOGIN_URL = "/login/"
+# Static files (CSS, JavaScript, Images)
 
+STATIC_URL = '/static/'
+
+STATIC_DIR = BASE_DIR / 'static'
+
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = '/login/'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
