@@ -220,17 +220,17 @@
         <article class="restaurant-card">
 
            {% if restaurant.image %}
-    <p>{{ restaurant.image.url }}</p>
+    <!-- <p>{{ restaurant.image.url }}</p> -->
 
     <img src="{{ restaurant.image.url }}"
          alt="{{ restaurant.name }}"
-         style="display:block; width:250px; height:200px; object-fit:cover;">
+         >
 {% else %}
-    <p>No image</p>
+    
 
     <img src="{% static 'images/default-restaurant.jpg' %}"
          alt="{{ restaurant.name }}"
-         style="display:block; width:250px; height:200px; object-fit:cover;">
+         >
 {% endif %}
 
 
