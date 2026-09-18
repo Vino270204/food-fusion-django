@@ -5,10 +5,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
 
-    # Home
-    path("", views.home, name="home"),
+    path(
+        "",
+        views.home,
+        name="home"
+    ),
 
-    # Restaurants
     path(
         "restaurants/",
         views.restaurants,
@@ -21,7 +23,6 @@ urlpatterns = [
         name="restaurant_detail"
     ),
 
-    # Food
     path(
         "menu/",
         views.menu,
@@ -34,14 +35,12 @@ urlpatterns = [
         name="food_detail"
     ),
 
-    # Offers
     path(
         "offers/",
         views.offers,
         name="offers"
     ),
 
-    # Cart
     path(
         "cart/",
         views.cart,
@@ -66,14 +65,12 @@ urlpatterns = [
         name="remove_from_cart"
     ),
 
-    # Checkout
     path(
         "checkout/",
         views.checkout,
         name="checkout"
     ),
 
-    # Order
     path(
         "order-confirmation/",
         views.order_confirmation,
@@ -92,7 +89,6 @@ urlpatterns = [
         name="order_detail"
     ),
 
-    # Authentication
     path(
         "login/",
         views.login_view,
