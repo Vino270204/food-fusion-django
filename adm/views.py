@@ -131,7 +131,7 @@ def menu(request):
 
 def food_detail(request, food_id):
 
-    foods = get_object_or_404(
+    food = get_object_or_404(
         Food,
         id=food_id,
         is_available=True
@@ -141,7 +141,7 @@ def food_detail(request, food_id):
         request,
         "pages/food_detail.html",
         {
-            "foods": foods
+            "food": food
         }
     )
 
