@@ -219,19 +219,19 @@
 {% for restaurant in restaurants %}
         <article class="restaurant-card">
 
-            {% if restaurant.image %}
+           {% if restaurant.image %}
+    <p>{{ restaurant.image.url }}</p>
 
-                <img src="{{ restaurant.image.url }}"
-                     alt="{{ restaurant.name }}" 
-                     style="display:block; width:100%; height:200px; object-fit:cover;">
+    <img src="{{ restaurant.image.url }}"
+         alt="{{ restaurant.name }}"
+         style="display:block; width:250px; height:200px; object-fit:cover;">
+{% else %}
+    <p>No image</p>
 
-
-            {% else %}
-
-                <img src="{% static 'images/default-restaurant.jpg' %}"
-                     alt="{{ restaurant.name }}">
-
-            {% endif %}
+    <img src="{% static 'images/default-restaurant.jpg' %}"
+         alt="{{ restaurant.name }}"
+         style="display:block; width:250px; height:200px; object-fit:cover;">
+{% endif %}
 
 
             <div class="restaurant-info">
